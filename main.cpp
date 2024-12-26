@@ -3,9 +3,9 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QStyleFactory>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     QTranslator translator;
@@ -17,6 +17,13 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    QStringList styles = QStyleFactory::keys();
+    if(styles.contains("Fusion")) {
+        QStyle *s = QStyleFactory::create("Fusion");
+        a.setStyle(s);
+    }
+
     MainWindow w;
     w.show();
     return a.exec();
