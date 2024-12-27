@@ -6,6 +6,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    // setup shortcuts
+    ui->actionFileSelectDirectory->setShortcut(QKeySequence::Open);
+    ui->actionFileFindOnly->setShortcut(QKeySequence::Find);
+    ui->actionFileFindAndReplace->setShortcut(QKeySequence::Replace);
+    ui->actionFileQuit->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_Q));
+
+    ui->actionProfileNew->setShortcut(QKeySequence::New);
+    ui->actionProfileSave->setShortcut(QKeySequence::Save);
+    ui->actionProfileSaveAs->setShortcut(QKeySequence::SaveAs);
+    ui->actionProfileImport->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_I));
+    ui->actionProfileExport->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_E));
+    ui->actionProfileManageProfiles->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_M));
+    ui->actionSettingsPreferences->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_Comma));
+    ui->actionHelpAbout->setShortcut(QKeySequence(Qt::Key_F1));
+
     connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
     connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
 
