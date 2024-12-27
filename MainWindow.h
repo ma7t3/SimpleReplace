@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 #include "DlgPreferences.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +20,11 @@ public:
     ~MainWindow();
 
 private slots:
+     /////////////
+    // MENUBAR //
+   /////////////
     // FILE
+    void on_actionFileSelectDirectory_triggered();
 
     // PROFILE
 
@@ -30,6 +35,8 @@ private slots:
     void on_actionHelpDocumentation_triggered();
     void on_actionHelpAbout_triggered();
     void on_actionHelpAboutQt_triggered();
+
+    void updateSearchAreaMode();
 
 private:
     Ui::MainWindow *ui;
