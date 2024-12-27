@@ -9,4 +9,10 @@
         <file>resources/Icon_512x512.png</file>
         <file>resources/Icon_1024x1024.png</file>
     </qresource>
+    <qresource prefix="/translations">
+        <file>de_DE.qm</file>
+        <file>en_US.qm</file>
+        <file>de_DE_qt.qm</file>
+        <file>en_US_qt.qm</file>
+    </qresource>
 </RCC>
