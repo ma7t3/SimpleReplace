@@ -17,6 +17,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_actionHelpDocumentation_triggered();
+    void on_actionHelpAbout_triggered();
+    void on_actionHelpAboutQt_triggered();
+
+
 private:
     Ui::MainWindow *ui;
 };
