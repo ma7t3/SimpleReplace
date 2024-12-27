@@ -67,45 +67,14 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QRadioButton" name="rbModeSimple">
-               <property name="text">
-                <string>Simple</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbModeAdvanced">
-               <property name="text">
-                <string>Advanced</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QStackedWidget" name="swSeachAreaOptions">
+            <widget class="QTabWidget" name="twSeachAreaOptions">
              <property name="currentIndex">
               <number>0</number>
              </property>
-             <widget class="QWidget" name="pModeSimple">
+             <widget class="QWidget" name="swSeachAreaOptionsPage1" native="true">
+              <attribute name="title">
+               <string>Simple</string>
+              </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
                 <layout class="QFormLayout" name="formLayout">
@@ -208,7 +177,10 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="pModeAdvanced">
+             <widget class="QWidget" name="swSeachAreaOptionsPage2" native="true">
+              <attribute name="title">
+               <string>Advanced</string>
+              </attribute>
               <layout class="QVBoxLayout" name="verticalLayout">
                <item>
                 <widget class="QLabel" name="lRegEx1">
@@ -446,7 +418,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -8,12 +8,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
 
-    connect(ui->rbModeSimple,   &QAbstractButton::toggled, this, &MainWindow::updateSearchAreaMode);
-    connect(ui->rbModeAdvanced, &QAbstractButton::toggled, this, &MainWindow::updateSearchAreaMode);
-
     connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
 
-    ui->swSeachAreaOptions->setCurrentIndex(0);
+    ui->twSeachAreaOptions->setCurrentIndex(0);
 
     ui->splitter->setSizes({100, 600});
 }
@@ -50,11 +47,3 @@ void MainWindow::on_actionHelpAbout_triggered() {
 void MainWindow::on_actionHelpAboutQt_triggered() {
     QMessageBox::aboutQt(this);
 }
-
-void MainWindow::updateSearchAreaMode() {
-    if(ui->rbModeAdvanced->isChecked())
-        ui->swSeachAreaOptions->setCurrentIndex(1);
-    else
-        ui->swSeachAreaOptions->setCurrentIndex(0);
-}
-

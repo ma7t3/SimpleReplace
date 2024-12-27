@@ -36,8 +36,6 @@ private slots:
     void on_actionHelpAbout_triggered();
     void on_actionHelpAboutQt_triggered();
 
-    void updateSearchAreaMode();
-
 private:
     Ui::MainWindow *ui;
 };

@@ -18,11 +18,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    QStringList styles = QStyleFactory::keys();
-    if(styles.contains("Fusion")) {
-        QStyle *s = QStyleFactory::create("Fusion");
-        a.setStyle(s);
-    }
+    QSettings settings("ma7t3", "SimpleReplace");
+    a.setStyle(QStyleFactory::create(settings.value("pref_theme", "windowsvista").toString()));
 
     MainWindow w;
     w.show();
