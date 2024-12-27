@@ -27,6 +27,7 @@ FORMS += \
     MainWindow.ui
 
 TRANSLATIONS += \
+    de_DE.ts \
     en_US.ts
 CONFIG += lrelease
 CONFIG += embed_translations
