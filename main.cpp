@@ -4,21 +4,24 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QStyleFactory>
+#include <QLibraryInfo>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    QSettings settings("ma7t3", "SimpleReplace");
+    QString languageKey = settings.value("pref_lang", "en_US").toString();
+
     QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "SimpleReplace_" + QLocale(locale).name();
-        if (translator.load(baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
+    if (translator.load(":/translations/" + languageKey + ".qm")) {
+        a.installTranslator(&translator);
     }
 
-    QSettings settings("ma7t3", "SimpleReplace");
+    QTranslator qtTranslator;
+    if (qtTranslator.load(":/translations/" + languageKey + "_qt.qm")) {
+        a.installTranslator(&qtTranslator);
+    }
+
     a.setStyle(QStyleFactory::create(settings.value("pref_theme", "windowsvista").toString()));
 
     MainWindow w;
