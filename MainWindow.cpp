@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->setupUi(this);
 
     connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
-
     connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
 
     ui->twSeachAreaOptions->setCurrentIndex(0);
@@ -17,6 +16,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::on_pbExcludeDirectories_clicked() {
+    DlgListEditor dlg;
+    dlg.setString(ui->leExcludeDirectories->text());
+    dlg.exec();
+    ui->leExcludeDirectories->setText(dlg.string());
+}
+
+void MainWindow::on_pbFileMask_clicked() {
+    DlgListEditor dlg;
+    dlg.setString(ui->leFileMask->text());
+    dlg.exec();
+    ui->leFileMask->setText(dlg.string());
+}
+
+void MainWindow::on_pbExcludeFileMask_clicked() {
+    DlgListEditor dlg;
+    dlg.setString(ui->leExcludeFileMask->text());
+    dlg.exec();
+    ui->leExcludeFileMask->setText(dlg.string());
 }
 
 void MainWindow::on_actionFileSelectDirectory_triggered() {

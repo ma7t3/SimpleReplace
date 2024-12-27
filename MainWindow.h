@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include "DlgPreferences.h"
+#include "DlgListEditor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,6 +21,10 @@ public:
     ~MainWindow();
 
 private slots:
+    void on_pbExcludeDirectories_clicked();
+    void on_pbFileMask_clicked();
+    void on_pbExcludeFileMask_clicked();
+
      /////////////
     // MENUBAR //
    /////////////
