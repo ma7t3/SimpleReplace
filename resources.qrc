@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/Qt_Icon_32x32.png</file>
+        <file>resources/Icon_32x32x.png</file>
+        <file>resources/Icon_64x64.ico</file>
+        <file>resources/Icon_64x64.png</file>
+        <file>resources/Icon_128x128.png</file>
+        <file>resources/Icon_256x256.png</file>
+        <file>resources/Icon_512x512.png</file>
+        <file>resources/Icon_1024x1024.png</file>
+    </qresource>
+</RCC>
