@@ -28,3 +28,8 @@ void MainWindow::on_actionHelpAbout_triggered() {
 void MainWindow::on_actionHelpAboutQt_triggered() {
     QMessageBox::aboutQt(this);
 }
+
+void MainWindow::on_actionSettingsPreferences_triggered() {
+    DlgPreferences dlg(this);
+    dlg.exec();
+}

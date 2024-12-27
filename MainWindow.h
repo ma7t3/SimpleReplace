@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "DlgPreferences.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,10 +19,17 @@ public:
     ~MainWindow();
 
 private slots:
+    // FILE
+
+    // PROFILE
+
+    // SETTINGS
+    void on_actionSettingsPreferences_triggered();
+
+    // HELP
     void on_actionHelpDocumentation_triggered();
     void on_actionHelpAbout_triggered();
     void on_actionHelpAboutQt_triggered();
-
 
 private:
     Ui::MainWindow *ui;

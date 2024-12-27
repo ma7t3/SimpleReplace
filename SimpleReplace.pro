@@ -11,13 +11,16 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 RC_ICONS = resources\Icon_64x64.ico
 
 SOURCES += \
+    DlgPreferences.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
+    DlgPreferences.h \
     MainWindow.h
 
 FORMS += \
+    DlgPreferences.ui \
     MainWindow.ui
 
 TRANSLATIONS += \
