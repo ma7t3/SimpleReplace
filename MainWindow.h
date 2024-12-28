@@ -27,6 +27,8 @@ private slots:
     void on_pbFileMask_clicked();
     void on_pbExcludeFileMask_clicked();
 
+    void on_pbSwapConent_clicked();
+
     void initResults();
 
      /////////////
@@ -44,6 +46,7 @@ private slots:
     void on_actionHelpDocumentation_triggered();
     void on_actionHelpAbout_triggered();
     void on_actionHelpAboutQt_triggered();
+
 
 private:
     Ui::MainWindow *ui;

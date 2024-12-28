@@ -109,6 +109,12 @@ void MainWindow::on_pbExcludeFileMask_clicked() {
     ui->leExcludeFileMask->setText(dlg.string());
 }
 
+void MainWindow::on_pbSwapConent_clicked() {
+    QString tmp = ui->pteFind->toPlainText();
+    ui->pteFind->setPlainText(ui->pteReplace->toPlainText());
+    ui->pteReplace->setPlainText(tmp);
+}
+
 void MainWindow::initResults() {
     ui->twResults->clearContents();
     ui->twResults->setRowCount(0);
