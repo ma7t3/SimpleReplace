@@ -7,6 +7,8 @@
 #include <QStringConverter>
 #include <QToolBar>
 
+#include "TWorker.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,6 +34,16 @@ private slots:
     void initResults();
     void setProgressInfoVisible(const bool &);
 
+    void updateWorkerConfig();
+    void startFindOnly();
+    void startFindAndReplace();
+
+    void enableUI();
+    void disableUI();
+    void changeUIEnabled(const bool &enabled);
+    void handleProgressUpdate(const int &value, const QString &text);
+    void handleFileFinished(const QString &file, const int &occurences, const bool &success);
+
      /////////////
     // MENUBAR //
    /////////////
@@ -52,6 +64,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStringList _codecs;
+
+    TWorker *worker;
 
     enum ResultTableColumns {
         FileColumn,

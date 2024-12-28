@@ -5,7 +5,8 @@
 #include "DlgListEditor.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
-    ui(new Ui::MainWindow) {
+    ui(new Ui::MainWindow),
+    worker(new TWorker(this)) {
     ui->setupUi(this);
 
     // setup shortcuts
@@ -34,14 +35,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     ui->dwResults->setVisible(false);
 
-    connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
-    connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
+    connect(ui->actionFileQuit,           &QAction::triggered,      qApp,                   &QGuiApplication::quit);
+    connect(ui->pbDirectoryBrowse,        &QPushButton::clicked,    this,                   &MainWindow::on_actionFileSelectDirectory_triggered);
 
-    connect(ui->pbFindOnly,               &QPushButton::clicked, ui->actionFileFindOnly, &QAction::trigger);
-    connect(ui->pbFindAndReplace,         &QPushButton::clicked, ui->actionFileFindOnly, &QAction::trigger);
+    connect(ui->pbFindOnly,               &QPushButton::clicked,    ui->actionFileFindOnly, &QAction::trigger);
+    connect(ui->pbFindAndReplace,         &QPushButton::clicked,    ui->actionFileFindOnly, &QAction::trigger);
 
-    connect(ui->actionFileFindOnly,       &QAction::triggered,   this,                   &MainWindow::initResults);
-    connect(ui->actionFileFindAndReplace, &QAction::triggered,   this,                   &MainWindow::initResults);
+    connect(ui->actionFileFindOnly,       &QAction::triggered,      this,                   &MainWindow::initResults);
+    connect(ui->actionFileFindAndReplace, &QAction::triggered,      this,                   &MainWindow::initResults);
+
+    connect(ui->actionFileFindOnly,       &QAction::triggered,      this,                   &MainWindow::startFindOnly);
+    connect(ui->actionFileFindAndReplace, &QAction::triggered,      this,                   &MainWindow::startFindAndReplace);
+
+    connect(worker,                       &QThread::started,        this,                   &MainWindow::disableUI);
+    connect(worker,                       &QThread::finished,       this,                   &MainWindow::enableUI);
+    connect(worker,                       &QThread::finished,       this,                   [this](){setProgressInfoVisible(false);});
+
+    connect(worker,                       &TWorker::progressUpdate, this,                   &MainWindow::handleProgressUpdate);
+    connect(worker,                       &TWorker::progressMax,    ui->progressBar,        &QProgressBar::setMaximum);
+    connect(worker,                       &TWorker::fileFinished,   this,                   &MainWindow::handleFileFinished);
 
     QToolBar *generalToolbar = addToolBar(tr("General"));
     generalToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -126,6 +138,66 @@ void MainWindow::initResults() {
 void MainWindow::setProgressInfoVisible(const bool &b) {
     ui->lProgressText->setVisible(b);
     ui->progressBar->setVisible(b);
+}
+
+void MainWindow::updateWorkerConfig() {
+    worker->setIncludeMode(ui->twSeachAreaOptions->currentIndex() == 0 ? TWorker::SimpleMode : TWorker::AdvancedMode);
+    worker->setWorkingDir(ui->leDirectory->text());
+    worker->setRecursive(ui->cbSearchRecursively->isChecked());
+    worker->setExcludeDir(ui->leExcludeDirectories->text().split(','));
+    worker->setFileMask(ui->leFileMask->text().split(','));
+    worker->setExcludeFileMask(ui->leExcludeFileMask->text().split(','));
+    worker->setAdvancedRegEx(ui->leRegEx->text());
+    worker->setCaseInsensitive(ui->cbOptionCaseInsensitive->isChecked());
+    worker->setUseRegex(ui->cbOptionUseRegEx->isChecked());
+    worker->setEncoding(static_cast<QStringConverter::Encoding>(ui->cbOptionEncoding->currentIndex())); // Bandwurmcall
+}
+
+void MainWindow::startFindOnly() {
+    updateWorkerConfig();
+    worker->setWorkMode(TWorker::FindOnlyMode);
+    setProgressInfoVisible(true);
+    worker->start();
+}
+
+void MainWindow::startFindAndReplace() {
+    updateWorkerConfig();
+    worker->setWorkMode(TWorker::FindAndReplaceMode);
+    setProgressInfoVisible(true);
+    worker->start();
+}
+
+void MainWindow::enableUI() {
+    changeUIEnabled(true);
+}
+
+void MainWindow::disableUI() {
+    changeUIEnabled(false);
+}
+
+void MainWindow::changeUIEnabled(const bool &enabled) {
+    ui->dwOptions->widget()->setEnabled(enabled);
+    ui->gbDirectory->setEnabled(enabled);
+    ui->gbFindeAndReplace->setEnabled(enabled);
+}
+
+void MainWindow::handleProgressUpdate(const int &value, const QString &text) {
+    ui->progressBar->setValue(value);
+    ui->lProgressText->setText(text);
+}
+
+void MainWindow::handleFileFinished(const QString &file, const int &occurences, const bool &success) {
+    if(success && occurences == 0)
+        return;
+
+    int tableIndex = ui->twResults->rowCount();
+    QTableWidgetItem *fileItem       = new QTableWidgetItem(file);
+    QTableWidgetItem *occurencesItem = new QTableWidgetItem(QString::number(occurences));
+    QTableWidgetItem *successItem    = new QTableWidgetItem(success ? "Success" : "Failed");
+    ui->twResults->insertRow(tableIndex);
+    ui->twResults->setItem(tableIndex, FileColumn,       fileItem);
+    ui->twResults->setItem(tableIndex, OccurencesColumn, occurencesItem);
+    ui->twResults->setItem(tableIndex, StatusColumn,     successItem);
 }
 
 void MainWindow::on_actionFileSelectDirectory_triggered() {
