@@ -13,13 +13,15 @@ RC_ICONS = resources\Icon_64x64.ico
 SOURCES += \
     DlgListEditor.cpp \
     DlgPreferences.cpp \
+    TWorker.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
     DlgListEditor.h \
     DlgPreferences.h \
-    MainWindow.h
+    MainWindow.h \
+    TWorker.h
 
 FORMS += \
     DlgListEditor.ui \
