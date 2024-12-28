@@ -77,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     profileToolbar->addSeparator();
     //TODO: Last Used Profiles here
 
+    setProgressInfoVisible(false);
+
     ui->twSeachAreaOptions->setCurrentIndex(0);
 
     ui->twResults->setColumnWidth(      FileColumn, 500);
@@ -119,6 +121,11 @@ void MainWindow::initResults() {
     ui->twResults->clearContents();
     ui->twResults->setRowCount(0);
     ui->dwResults->setVisible(true);
+}
+
+void MainWindow::setProgressInfoVisible(const bool &b) {
+    ui->lProgressText->setVisible(b);
+    ui->progressBar->setVisible(b);
 }
 
 void MainWindow::on_actionFileSelectDirectory_triggered() {

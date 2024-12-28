@@ -30,6 +30,7 @@ private slots:
     void on_pbSwapConent_clicked();
 
     void initResults();
+    void setProgressInfoVisible(const bool &);
 
      /////////////
     // MENUBAR //
