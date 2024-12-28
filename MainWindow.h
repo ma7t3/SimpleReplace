@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-#include "DlgPreferences.h"
-#include "DlgListEditor.h"
+#include <QMessageBox>
+#include <QStringConverter>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -43,5 +43,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QStringList _codecs;
 };
 #endif // MAINWINDOW_H

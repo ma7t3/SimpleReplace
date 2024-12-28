@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include <QMessageBox>
+
+#include "DlgPreferences.h"
+#include "DlgListEditor.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -20,6 +22,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->actionProfileManageProfiles->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_M));
     ui->actionSettingsPreferences->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_Comma));
     ui->actionHelpAbout->setShortcut(QKeySequence(Qt::Key_F1));
+
+    _codecs = QStringConverter::availableCodecs();
+    for(const QString &current : _codecs) {
+        if(current == "ISO-8859-1")
+            ui->cbOptionEncoding->addItem("Windows-1252");
+        else
+            ui->cbOptionEncoding->addItem(current);
+    }
 
     connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
     connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
