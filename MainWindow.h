@@ -5,6 +5,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStringConverter>
+#include <QToolBar>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,6 +27,8 @@ private slots:
     void on_pbFileMask_clicked();
     void on_pbExcludeFileMask_clicked();
 
+    void initResults();
+
      /////////////
     // MENUBAR //
    /////////////
@@ -44,5 +48,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStringList _codecs;
+
+    enum ResultTableColumns {
+        FileColumn,
+        StatusColumn,
+        OccurencesColumn
+    };
 };
 #endif // MAINWINDOW_H

@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->actionProfileNew->setShortcut(QKeySequence::New);
     ui->actionProfileSave->setShortcut(QKeySequence::Save);
     ui->actionProfileSaveAs->setShortcut(QKeySequence::SaveAs);
+    ui->actionProfileSwitchProfile->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_P));
     ui->actionProfileImport->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_I));
     ui->actionProfileExport->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_E));
     ui->actionProfileManageProfiles->setShortcut(QKeySequence(Qt::CTRL|Qt::Key_M));
@@ -31,12 +32,56 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
             ui->cbOptionEncoding->addItem(current);
     }
 
+    ui->dwResults->setVisible(false);
+
     connect(ui->actionFileQuit, &QAction::triggered, qApp, &QGuiApplication::quit);
     connect(ui->pbDirectoryBrowse, &QPushButton::clicked, this, &MainWindow::on_actionFileSelectDirectory_triggered);
 
+    connect(ui->pbFindOnly,               &QPushButton::clicked, ui->actionFileFindOnly, &QAction::trigger);
+    connect(ui->pbFindAndReplace,         &QPushButton::clicked, ui->actionFileFindOnly, &QAction::trigger);
+
+    connect(ui->actionFileFindOnly,       &QAction::triggered,   this,                   &MainWindow::initResults);
+    connect(ui->actionFileFindAndReplace, &QAction::triggered,   this,                   &MainWindow::initResults);
+
+    QToolBar *generalToolbar = addToolBar(tr("General"));
+    generalToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    QAction *optionsToogleAction = ui->dwOptions->toggleViewAction();
+    QAction *resultsToogleAction = ui->dwResults->toggleViewAction();
+
+    optionsToogleAction->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+    resultsToogleAction->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyLeft));
+
+    optionsToogleAction->setText(tr("Options"));
+    resultsToogleAction->setText(tr("Results"));
+
+    optionsToogleAction->setShortcut(QKeySequence(Qt::ALT|Qt::Key_O));
+    resultsToogleAction->setShortcut(QKeySequence(Qt::ALT|Qt::Key_R));
+
+    ui->menuView->addAction(optionsToogleAction);
+    ui->menuView->addAction(resultsToogleAction);
+
+    generalToolbar->addAction(optionsToogleAction);
+    generalToolbar->addAction(resultsToogleAction);
+    generalToolbar->addSeparator();
+
+    QToolBar *profileToolbar = addToolBar(tr("Profiles"));
+    profileToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    profileToolbar->addAction(ui->actionProfileNew);
+    profileToolbar->addAction(ui->actionProfileSave);
+    profileToolbar->addAction(ui->actionProfileSwitchProfile);
+    profileToolbar->addSeparator();
+    profileToolbar->addAction(ui->actionProfileImport);
+    profileToolbar->addAction(ui->actionProfileExport);
+    profileToolbar->addAction(ui->actionProfileManageProfiles);
+    profileToolbar->addSeparator();
+    //TODO: Last Used Profiles here
+
     ui->twSeachAreaOptions->setCurrentIndex(0);
 
-    ui->splitter->setSizes({100, 600});
+    ui->twResults->setColumnWidth(      FileColumn, 500);
+    ui->twResults->setColumnWidth(    StatusColumn, 100);
+    ui->twResults->setColumnWidth(OccurencesColumn, 100);
 }
 
 MainWindow::~MainWindow() {
@@ -62,6 +107,12 @@ void MainWindow::on_pbExcludeFileMask_clicked() {
     dlg.setString(ui->leExcludeFileMask->text());
     dlg.exec();
     ui->leExcludeFileMask->setText(dlg.string());
+}
+
+void MainWindow::initResults() {
+    ui->twResults->clearContents();
+    ui->twResults->setRowCount(0);
+    ui->dwResults->setVisible(true);
 }
 
 void MainWindow::on_actionFileSelectDirectory_triggered() {
