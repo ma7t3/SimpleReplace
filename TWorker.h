@@ -55,6 +55,16 @@ public:
     bool recursive() const;
     void setRecursive(bool newRecursive);
 
+    QString searchString() const;
+    void setSearchString(const QString &newSearchString);
+
+    QString replaceString() const;
+    void setReplaceString(const QString &newReplaceString);
+
+protected:
+    void processFolder(const QString folderPath);
+    void processFile(const QString filePath);
+
 signals:
     void progressUpdate(const int &value, const QString &text);
     void progressMax(const int &max);
@@ -72,6 +82,8 @@ private:
     bool _caseInsensitive;
     bool _useRegex;
     QStringConverter::Encoding _encoding;
+
+    QString _searchString, _replaceString;
 };
 
 #endif // TWORKER_H

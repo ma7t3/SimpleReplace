@@ -151,6 +151,8 @@ void MainWindow::updateWorkerConfig() {
     worker->setCaseInsensitive(ui->cbOptionCaseInsensitive->isChecked());
     worker->setUseRegex(ui->cbOptionUseRegEx->isChecked());
     worker->setEncoding(static_cast<QStringConverter::Encoding>(ui->cbOptionEncoding->currentIndex())); // Bandwurmcall
+    worker->setSearchString(ui->pteFind->toPlainText());
+    worker->setReplaceString(ui->pteReplace->toPlainText());
 }
 
 void MainWindow::startFindOnly() {
@@ -181,6 +183,10 @@ void MainWindow::changeUIEnabled(const bool &enabled) {
     ui->gbFindeAndReplace->setEnabled(enabled);
 }
 
+void MainWindow::handleProgressMax(const int &value) {
+    ui->progressBar->setMaximum(value);
+}
+
 void MainWindow::handleProgressUpdate(const int &value, const QString &text) {
     ui->progressBar->setValue(value);
     ui->lProgressText->setText(text);
@@ -198,6 +204,7 @@ void MainWindow::handleFileFinished(const QString &file, const int &occurences, 
     ui->twResults->setItem(tableIndex, FileColumn,       fileItem);
     ui->twResults->setItem(tableIndex, OccurencesColumn, occurencesItem);
     ui->twResults->setItem(tableIndex, StatusColumn,     successItem);
+    ui->twResults->setRowHeight(tableIndex, 10);
 }
 
 void MainWindow::on_actionFileSelectDirectory_triggered() {

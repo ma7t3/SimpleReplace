@@ -41,6 +41,7 @@ private slots:
     void enableUI();
     void disableUI();
     void changeUIEnabled(const bool &enabled);
+    void handleProgressMax(const int &value);
     void handleProgressUpdate(const int &value, const QString &text);
     void handleFileFinished(const QString &file, const int &occurences, const bool &success);
 

@@ -14,6 +14,61 @@ TWorker::TWorker(QObject *parent) :
 
 void TWorker::run() {
     // Do some work here
+    processFolder(_workingDir);
+}
+
+void TWorker::processFolder(const QString folderPath) {
+    QString relPath = folderPath;
+    relPath.remove(_workingDir + "/");
+    QDir dir(folderPath);
+    QStringList files = dir.entryList(QDir::Files|QDir::NoDotAndDotDot);
+    emit progressMax(files.count());
+    int i = 0;
+    for(QString current : files) {
+        emit progressUpdate(i, relPath + "/" + current);
+        processFile(folderPath + "/" + current);
+
+        i++;
+    }
+
+    if(_recursive) {
+        QStringList folders = dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
+        for(QString current : folders) {
+            processFolder(folderPath + "/" + current);
+        }
+    }
+
+    emit progressUpdate(i + 1, tr("Finished"));
+}
+
+void TWorker::processFile(const QString filePath) {
+    QString relPath = filePath;
+    relPath.remove(_workingDir + "/");
+
+    QFile f(filePath);
+    if(!f.open(QFile::ReadWrite)) {
+        emit fileFinished(relPath, 0, false);
+        return;
+    }
+
+    QTextStream s(&f);
+    s.setEncoding(_encoding);
+    QString str = s.readAll();
+    f.close();
+
+    int count = str.count(_searchString, (_caseInsensitive ? Qt::CaseInsensitive : Qt::CaseSensitive));
+
+    if(_workMode == FindAndReplaceMode)
+        str.replace(_searchString, _replaceString, (_caseInsensitive ? Qt::CaseInsensitive : Qt::CaseSensitive));
+
+    if(!f.open(QFile::WriteOnly|QFile::Truncate)) {
+        emit fileFinished(relPath, 0, false);
+        return;
+    }
+
+    s << str;
+    f.close();
+    emit fileFinished(relPath, count, true);
 }
 
 TWorker::WorkMode TWorker::workMode() const {
@@ -113,4 +168,20 @@ QStringConverter::Encoding TWorker::encoding() const {
 
 void TWorker::setEncoding(QStringConverter::Encoding newEncoding) {
     _encoding = newEncoding;
+}
+
+QString TWorker::replaceString() const {
+    return _replaceString;
+}
+
+void TWorker::setReplaceString(const QString &newReplaceString) {
+    _replaceString = newReplaceString;
+}
+
+QString TWorker::searchString() const {
+    return _searchString;
+}
+
+void TWorker::setSearchString(const QString &newSearchString) {
+    _searchString = newSearchString;
 }
